@@ -1,0 +1,4 @@
+.build/
+.dynamodb/
+node_modules/
+*.md

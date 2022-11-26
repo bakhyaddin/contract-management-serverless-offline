@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/product.schema.json",
+  "title": "User entity",
+  "description": "User data to create one and login",
+  "type": "object",
+  "properties": {
+    "username": {
+      "description": "Username",
+      "type": "string"
+    },
+    "password": {
+      "description": "User password",
+      "type": "string"
+    }
+  },
+  "required": [
+    "username",
+    "password"
+  ]
+}

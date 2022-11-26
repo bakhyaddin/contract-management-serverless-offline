@@ -1,0 +1,109 @@
+service: contract-management-offline
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  profile: default
+  stage: dev
+  environment:
+    SECRET_KEY: 'test'
+    CONTRACTS_TABLE_NAME: 'ContractsTableName'
+    USERS_TABLE_NAME: 'UsersTableName'
+    AWS_ACCESS_KEY_ID: 'fake-access-key-id'
+    AWS_SECRET_ACCESS_KEY: 'fake-secret-key'
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  # serverless-offline:
+  #   host: 0.0.0.0
+  stages:
+    - ${self:provider.stage}
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      # docker: true
+      # noStart: true
+
+functions:
+  createContract:
+    handler: handler.createContract
+    events:
+      - http:
+          path: create-contract
+          method: post
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(src/validations/createContract.json)}
+
+  getContract:
+    handler: handler.getContract
+    events:
+      - http:
+          path: get-contract
+          method: get
+          cors: true
+
+  getContractIDs:
+    handler: handler.getContractIDs
+    events:
+      - http:
+          path: get-contract-ids
+          method: get
+          cors: true
+
+  crateUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: create-user
+          method: post
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(src/validations/user.json)}
+
+  loginUser:
+    handler: handler.loginUser
+    events:
+      - http:
+          path: login-user
+          method: post
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(src/validations/user.json)}
+
+resources:
+  Resources:
+    ContractsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: contractId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: contractId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.CONTRACTS_TABLE_NAME}
+
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.USERS_TABLE_NAME}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/product.schema.json",
+  "title": "Contract",
+  "description": "Contract data to create",
+  "type": "object",
+  "properties": {
+    "contractName": {
+      "description": "Name of the Contract",
+      "type": "string"
+    },
+    "templateId": {
+      "description": "The template that the particular Contract belongs to",
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "contractName",
+    "templateID"
+  ]
+}
