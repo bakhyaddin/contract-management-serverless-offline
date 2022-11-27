@@ -1,21 +1,4 @@
-export enum ResponseStatus {
-  SUCCESS = 200,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-  INTERNAL_ERROR = 500,
-}
-
-enum ErrorType {
-  BAD_TOKEN = 'BadTokenError',
-  TOKEN_EXPIRED = 'TokenExpiredError',
-  UNAUTHORIZED = 'AuthFailureError',
-  INTERNAL = 'InternalError',
-  NO_DATA = 'NoDataError',
-  BAD_REQUEST = 'BadRequestError',
-  FORBIDDEN = 'ForbiddenError',
-}
+import { ErrorType, ResponseStatus } from '../constants';
 
 export abstract class ApiError extends Error {
   constructor(
@@ -26,7 +9,7 @@ export abstract class ApiError extends Error {
     super(type);
   }
 
-  public static handle(err: ApiError, res) {
+  public static handle(err: ApiError, res: ResponseSlsPress) {
     switch (err.type) {
       case ErrorType.INTERNAL:
         return res.internalServerError(err);
@@ -60,7 +43,7 @@ export class InternalError extends ApiError {
 }
 
 export class BadRequestError extends ApiError {
-  constructor(message = 'Bad Request') {
+  constructor(message = 'Bad RequestSlsPress') {
     super(ErrorType.BAD_REQUEST, ResponseStatus.BAD_REQUEST, message);
   }
 }

@@ -5,14 +5,14 @@ import bcrypt from 'bcryptjs';
 import { User } from '../database/entities/user';
 
 import dynamoDBClient from '../database/dynamodb';
+import { usersTableName } from '../constants';
 
 export class UserService {
   private static dynamoDBClient = dynamoDBClient();
-  private static userTableName = process.env.USERS_TABLE_NAME!;
 
-  public static async getUser(username: string): Promise<User> {
+  public static async getUser(username: string): Promise<User | undefined> {
     const params: GetItemInput = {
-      TableName: this.userTableName!,
+      TableName: usersTableName,
       // @ts-ignore
       Key: { username },
     };
@@ -24,14 +24,15 @@ export class UserService {
   public static async createUser(username: string, password: string): Promise<User> {
     const userId = v4();
     const hashedPassword = await bcrypt.hash(password, 12);
+    const userParams: User = { username, userId, password: hashedPassword };
 
     const params: PutItemInput = {
-      TableName: this.userTableName!,
+      TableName: usersTableName,
       // @ts-ignore
-      Item: { username, userId, password: hashedPassword },
+      Item: userParams,
     };
 
-    const user = await this.dynamoDBClient.put(params).promise();
-    return { userId, username } as unknown as User;
+    await this.dynamoDBClient.put(params).promise();
+    return userParams;
   }
 }

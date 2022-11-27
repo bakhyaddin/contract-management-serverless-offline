@@ -3,12 +3,16 @@ import { v4 } from 'uuid';
 
 import { Contract } from '../database/entities/contract';
 import dynamoDBClient from '../database/dynamodb';
+import { contractsTableName } from '../constants';
 
 export class ContractService {
   private static dynamoDBClient = dynamoDBClient();
-  private static constactTableName = process.env.CONTRACTS_TABLE_NAME!;
 
-  public static async create(userId: string, contractName: string, templateId: string) {
+  public static async create(
+    userId: string,
+    contractName: string,
+    templateId: string,
+  ): Promise<Contract> {
     const newContractId = v4();
     const newContract = Object.assign(new Contract(), {
       userId,
@@ -18,7 +22,7 @@ export class ContractService {
     });
 
     const params: PutItemInput = {
-      TableName: this.constactTableName,
+      TableName: contractsTableName,
       // @ts-ignore
       Item: newContract,
     };
@@ -27,9 +31,9 @@ export class ContractService {
     return newContract;
   }
 
-  public static async getContractIds(userId: string) {
+  public static async getContractIds(userId: string): Promise<Array<{ contractId: string }>> {
     const params: ScanInput = {
-      TableName: this.constactTableName!,
+      TableName: contractsTableName,
       ExpressionAttributeValues: {
         // @ts-ignore
         ':userId': userId,
@@ -37,16 +41,17 @@ export class ContractService {
       FilterExpression: 'userId = :userId',
     };
 
-    const contracts = (await dynamoDBClient().scan(params).promise())
+    const contracts = (await this.dynamoDBClient.scan(params).promise())
       .Items as unknown as Contract[];
+
     return contracts.map((contract) => ({
       contractId: contract.contractId,
     }));
   }
 
-  public static async getContract(id: string) {
+  public static async getContract(id: string): Promise<Contract | undefined> {
     const params: GetItemInput = {
-      TableName: this.constactTableName!,
+      TableName: contractsTableName,
       // @ts-ignore
       Key: { contractId: id },
     };

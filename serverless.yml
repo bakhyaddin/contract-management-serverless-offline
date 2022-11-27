@@ -9,6 +9,8 @@ provider:
     SECRET_KEY: 'test'
     CONTRACTS_TABLE_NAME: 'ContractsTableName'
     USERS_TABLE_NAME: 'UsersTableName'
+    AWS_REGION: 'localhost'
+    AWS_ENDPOINT: 'http://localhost:8000'
     AWS_ACCESS_KEY_ID: 'fake-access-key-id'
     AWS_SECRET_ACCESS_KEY: 'fake-secret-key'
 

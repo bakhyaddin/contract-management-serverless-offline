@@ -20,12 +20,11 @@
     "sourceMap": true,
     "outDir": ".build",
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-
+    "typeRoots": ["node_modules/@types", "src/types"],
     "preserveConstEnums": true,
     "lib": ["ESNext"],
     "rootDir": "./"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/**/*", ".serverless/**/*", ".vscode/**/*"]
+  "include": ["src/**/*", "test/**/*", "handler"],
+  "exclude": ["node_modules/**/*", ".build/**/*", ".dynamodb/**/*", ".vscode/**/*"]
 }

@@ -17,6 +17,6 @@
   },
   "required": [
     "contractName",
-    "templateID"
+    "templateId"
   ]
 }
