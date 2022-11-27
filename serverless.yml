@@ -20,8 +20,8 @@ plugins:
   - serverless-offline
 
 custom:
-  # serverless-offline:
-  #   host: 0.0.0.0
+  serverless-offline:
+    host: 0.0.0.0
   stages:
     - ${self:provider.stage}
   dynamodb:
@@ -29,12 +29,10 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-      # docker: true
-      # noStart: true
 
 functions:
   createContract:
-    handler: handler.createContract
+    handler: src/app.createContract
     events:
       - http:
           path: create-contract
@@ -45,7 +43,7 @@ functions:
               application/json: ${file(src/validations/createContract.json)}
 
   getContract:
-    handler: handler.getContract
+    handler: src/app.getContract
     events:
       - http:
           path: get-contract
@@ -53,7 +51,7 @@ functions:
           cors: true
 
   getContractIDs:
-    handler: handler.getContractIDs
+    handler: src/app.getContractIDs
     events:
       - http:
           path: get-contract-ids
@@ -61,7 +59,7 @@ functions:
           cors: true
 
   crateUser:
-    handler: handler.createUser
+    handler: src/app.createUser
     events:
       - http:
           path: create-user
@@ -72,7 +70,7 @@ functions:
               application/json: ${file(src/validations/user.json)}
 
   loginUser:
-    handler: handler.loginUser
+    handler: src/app.loginUser
     events:
       - http:
           path: login-user

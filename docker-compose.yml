@@ -1,24 +1,12 @@
 version: '3.8'
 
 services:
-  api:
+  contract-manatement:
     build:
       context: ./
     restart: unless-stopped
-    env_file: .env
     volumes:
       - ./src:/opt/app-root/contracts-manager/src
-      - ./handler.js:/opt/app-root/contracts-manager/handler.js
-      - ./serverless.yml:/opt/app-root/contracts-manager/serverless.yml
     ports:
-      - ${API_PORT}:${API_PORT}
-
-  dynamodb:
-    image: amazon/dynamodb-local:1.16.0
-    hostname: ${DB_HOST_NAME}
-    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/'
-    restart: unless-stopped
-    volumes:
-      - ./data/dynamodb:/home/dynamodblocal/data
-    ports:
-      - ${DB_PORT}:${DB_PORT}
+      - 3000:3000
+      - 8000:8000

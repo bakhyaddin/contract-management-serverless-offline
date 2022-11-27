@@ -1,43 +1,43 @@
-import { ContractFunctions } from './src/functions/contract';
-import { UserFunctions } from './src/functions/user';
+import { ContractFunctions } from './functions/contract';
+import { UserFunctions } from './functions/user';
 
-import { AuthMiddleware } from './src/middlewares/auth';
+import { AuthMiddleware } from './middlewares/auth';
 
 const { create, jsonMiddleware, loggingMiddleware } = require('slspress');
 
-const handler = create();
+const app = create();
 
-handler
+app
   .on('createContract')
   .middleware(jsonMiddleware)
   .middleware(AuthMiddleware.jwtAuth)
   .middleware(loggingMiddleware)
   .post('/create-contract', ContractFunctions.createContract);
 
-handler
+app
   .on('getContract')
   .middleware(jsonMiddleware)
   .middleware(AuthMiddleware.jwtAuth)
   .middleware(loggingMiddleware)
   .get('/get-contract', ContractFunctions.getContract);
 
-handler
+app
   .on('getContractIDs')
   .middleware(jsonMiddleware)
   .middleware(AuthMiddleware.jwtAuth)
   .middleware(loggingMiddleware)
   .get('/get-contract-ids', ContractFunctions.getContractIds);
 
-handler
+app
   .on('createUser')
   .middleware(jsonMiddleware)
   .middleware(loggingMiddleware)
   .post('/create-user', UserFunctions.createUser);
 
-handler
+app
   .on('loginUser')
   .middleware(jsonMiddleware)
   .middleware(loggingMiddleware)
   .post('/login-user', UserFunctions.loginUser);
 
-module.exports = handler.export();
+module.exports = app.export();

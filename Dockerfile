@@ -1,4 +1,4 @@
-FROM node:16.10.0-alpine
+FROM node:16.10.0
 
 USER root
 
@@ -6,11 +6,16 @@ USER root
 WORKDIR /opt/app-root/contracts-manager
 COPY . .
 
-# install packages
+# install jre
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jre-headless && \
+    apt-get clean;
+
+# install packages and dynamodb
 RUN npm install \
-    # && npm run serverless dynamodb install \
-    && chmod +x ./docker-entrypoint.sh
+    && npm run dynamodb:install
 
 EXPOSE 3000
+EXPOSE 8000
 
-CMD ["./docker-entrypoint.sh"]
+CMD ["npm", "run", "start"]

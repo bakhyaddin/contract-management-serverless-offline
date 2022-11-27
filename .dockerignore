@@ -1,0 +1,10 @@
+.build
+.dynamodb
+.vscode
+node_modules
+.eslintignore
+.eslintrc
+.prettierignore
+.prettierrc
+postman-collectiom.json
+swagger.yml

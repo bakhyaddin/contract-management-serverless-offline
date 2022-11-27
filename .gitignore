@@ -2,3 +2,4 @@
 .dynamodb
 data
 node_modules
+.env
